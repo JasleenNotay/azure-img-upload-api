@@ -1,8 +1,12 @@
-const { pool } = require("../config/db_config");
-const fs = require("fs");
+const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
+const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
+const { pool } = require("../config/db_config");
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const createImagesTable = async () => {
   try {
@@ -87,4 +91,4 @@ const addImageData = async (req, res) => {
   }
 };
 
-module.exports = { addImageData };
+module.exports = { addImageData, upload: upload.single("file") };
