@@ -9,7 +9,16 @@ const { v4: uuidv4 } = require("uuid");
 const { pool } = require("./config/db_config");
 const excelUploadController = require("./controllers/excelUploadController");
 const app = express();
-app.use(cors());
+
+
+// Configure CORS
+const corsOptions = {
+  origin: 'https://imgupload-frontend.azurewebsites.net',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,7 +74,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       await createImagesTable();
 
       const result = await pool.query(
-        `INSERT INTO upload_images (
+        `INSERT INTO image_upload (
           image_link1
         ) VALUES ($1) RETURNING *`,
         [imageUrl]
